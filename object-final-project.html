@@ -1,0 +1,117 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+    <title>Processing Template</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.4.13/p5.js"></script>
+    <script>
+        var ballX//
+        var ballY
+
+        var levels = [];// declaring the object 
+
+        var rising = false // declaring a false statemtent 
+
+
+
+        function setup() {
+            createCanvas(500, 500);
+
+            levels.push(new Level());
+
+
+            ballX = random(20);
+            ballY = random(20);
+
+        }
+
+        function draw() {
+            ballX = constrain(ballX, 0, width)
+
+            ballY = constrain(ballY, -9999, height)
+            background(200, 225, 230);
+
+            ellipse(ballX, ballY, 30, 30);
+            rising = false;
+
+            for (i = 0; i < levels.length; i++) {
+                levels[i].move();
+                levels[i].display();
+                levels[i].checkCollide();
+                
+
+            }
+
+
+
+            if (frameCount % 60 == 0) { // when it reaches one second a new rectangle will be created
+                this.x = 500; // where the rectangles will come out of from the x-axis (which is the bottom)
+                this.y = 500;
+                levels.push(new Level());
+                console.log(levels);
+            }
+
+            if (ballY < 0) {
+                textSize(20);
+                text("GAME OVER", width / 2, height / 2);
+                noLoop();
+            }
+        }
+
+
+        function Level() {
+
+            this.x = random(40, 500);// that rectangle will spread from the beginning to the end, in a random position  
+            this.y = random(500, 500);// that rectangle will come out only from the bottom 
+            this.w = 100;
+            this.r = random(220);//that rectangle will have a random shade of red  
+            this.g = random(215);//that rectangle will have a random shade of green 
+            this.b = random(220);// that rectangle will have a random shade of blue
+            this.h = 30// the height of that rectangle is 30
+
+            this.move = function() {
+                this.y += -2;
+                
+            }
+
+            this.display = function() {
+                stroke(225);
+                fill(this.r, this.g, this.b); // will make the color of the rectangle of that certain rectangle
+                rect(this.x, this.y, this.w, this.h);
+
+            }
+
+            this.checkCollide = function() {
+                if (ballX > this.x && ballX < this.x + this.w && ballY > this.y && ballY < this.y + this.h / 2) {
+                    ballY += -2;
+                    rising = true;
+                
+                
+
+                }
+            }
+
+        }
+
+        function keyPressed() {
+            if (keyCode == UP_ARROW && keyIsPressed && !rising) { // when the up arrow is pressed the ball will go up 
+                ballY += -30;
+            }
+            if (keyCode == DOWN_ARROW && keyIsPressed && !rising) { // when the down arrow is pressed the ball will go down 
+                ballY += 30;
+            }
+            if (keyCode == RIGHT_ARROW && keyIsPressed && !rising) { // when the right arrow is pressed the ball will go to the right 
+                ballX += +30;
+            }
+            if (keyCode == LEFT_ARROW && keyIsPressed && !rising) { // when the left arrow is pressed the ball will go to the left 
+                ballX -= 30;
+            }
+        }
+    </script>
+</head>
+
+<body>
+<form><input TYPE="button" onClick="history.go(0)" value="Reset"></form>
+</body>
+
+</html>
